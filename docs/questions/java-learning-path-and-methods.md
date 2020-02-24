@@ -119,7 +119,7 @@
 
 ### step 7:常用框架
 
-学习 Struts2(可不用学)、**Spring**、**SpringMVC**、**Hibernate**、**Mybatis**、**shiro** 等框架的使用， (可选) 熟悉 **Spring 原理**（大厂面试必备），然后很有必要学习一下 **SpringBoot** ，**学好 SpringBoot 真的很重要**。很多公司对于应届生都是直接上手 **SpringBoot**，不过如果时间允许的话，我还是推荐你把 **Spring**、**SpringMVC** 提前学一下。
+学习 Struts2(可不用学)、**Spring**、**SpringMVC**、**Hibernate**、**Mybatis**、**shiro** 等框架的使用， (可选) ==熟悉 **Spring 原理**（大厂面试必备）==，然后很有必要学习一下 **SpringBoot** ，**学好 SpringBoot 真的很重要**。很多公司对于应届生都是直接上手 **SpringBoot**，不过如果时间允许的话，我还是推荐你把 **Spring**、**SpringMVC** 提前学一下。
 
 关于 SpringBoot ，推荐看一下笔主开源的 [Spring Boot 教程](https://github.com/Snailclimb/springboot-guide "Spring Boot 教程") （SpringBoot 核心知识点总结。 基于 Spring Boot 2.19+）。
 

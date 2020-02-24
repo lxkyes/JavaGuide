@@ -192,7 +192,7 @@ public static <T> List<T> asList(T... a) {
 
 ### 2.1.3. 使用时的注意事项总结
 
-**传递的数组必须是对象数组，而不是基本类型。** 
+==**传递的数组必须是对象数组，而不是基本类型。**== 
 
 `Arrays.asList()`是泛型方法，传入的对象必须是对象数组。
 
@@ -222,7 +222,7 @@ myList.remove(1);//运行时报错：UnsupportedOperationException
 myList.clear();//运行时报错：UnsupportedOperationException
 ```
 
-`Arrays.asList()` 方法返回的并不是 `java.util.ArrayList` ，而是 `java.util.Arrays` 的一个内部类,这个内部类并没有实现集合的修改方法或者说并没有重写这些方法。
+==`Arrays.asList()` 方法返回的并不是 `java.util.ArrayList` ，而是 `java.util.Arrays` 的一个内部类,这个内部类并没有实现集合的修改方法或者说并没有重写这些方法。==
 
 ```java
 List myList = Arrays.asList(1, 2, 3);
@@ -361,7 +361,7 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 
 ## 2.3. 不要在 foreach 循环里进行元素的 remove/add 操作
 
-如果要进行`remove`操作，可以调用迭代器的 `remove `方法而不是集合类的 remove 方法。因为如果列表在任何时间从结构上修改创建迭代器之后，以任何方式除非通过迭代器自身`remove/add`方法，迭代器都将抛出一个`ConcurrentModificationException`,这就是单线程状态下产生的 **fail-fast 机制**。
+如果要进行`remove`操作，可以调用迭代器的 `remove `方法而不是集合类的 remove 方法。因为如果列表在任何时间从结构上修改创建迭代器之后，以任何方式==除非==通过迭代器自身`remove/add`方法，迭代器都将抛出一个`ConcurrentModificationException`,这就是单线程状态下产生的 **fail-fast 机制**。
 
 > **fail-fast 机制** ：多个线程对 fail-fast 集合进行修改的时，可能会抛出ConcurrentModificationException，单线程下也会出现这种情况，上面已经提到过。
 

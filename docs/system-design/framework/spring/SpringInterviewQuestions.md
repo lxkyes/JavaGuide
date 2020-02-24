@@ -2,7 +2,7 @@
 
 ## 1. 什么是 Spring 框架?
 
-Spring 是一种轻量级开发框架，旨在提高开发人员的开发效率以及系统的可维护性。Spring 官网：<https://spring.io/>。
+Spring 是一种==轻量级开发框架==，旨在提高开发人员的开发效率以及系统的可维护性。Spring 官网：<https://spring.io/>。
 
 我们一般说 Spring 框架指的都是 Spring Framework，它是很多模块的集合，使用这些模块可以很方便地协助我们进行开发。这些模块是：核心容器、数据访问/集成,、Web、AOP（面向切面编程）、工具、消息和测试模块。比如：Core Container 中的 Core 组件是Spring 所有组件的核心，Beans 组件和 Context 组件是实现IOC和依赖注入的基础，AOP组件用来实现面向切面编程。
 
@@ -63,9 +63,9 @@ Reference:
 
 #### IoC
 
-IoC（Inverse of Control:控制反转）是一种**设计思想**，就是 **将原本在程序中手动创建对象的控制权，交由Spring框架来管理。**  IoC 在其他语言中也有应用，并非 Spirng 特有。 **IoC 容器是 Spring 用来实现 IoC 的载体，  IoC 容器实际上就是个Map（key，value）,Map 中存放的是各种对象。**
+IoC（Inverse of Control:控制反转）是一种**设计思想**，就是 ==**将原本在程序中手动创建对象的控制权，交由Spring框架来管理。**==  IoC 在其他语言中也有应用，并非 Spirng 特有。 **==IoC 容器是 Spring 用来实现 IoC 的载体，  IoC 容器实际上就是个Map（key，value）,Map 中存放的是各种对象==。**
 
-将对象之间的相互依赖关系交给 IoC 容器来管理，并由 IoC 容器完成对象的注入。这样可以很大程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。  **IoC 容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件/注解即可，完全不用考虑对象是如何被创建出来的。** 在实际项目中一个 Service 类可能有几百甚至上千个类作为它的底层，假如我们需要实例化这个 Service，你可能要每次都要搞清这个 Service 所有底层类的构造函数，这可能会把人逼疯。如果利用 IoC 的话，你只需要配置好，然后在需要的地方引用就行了，这大大增加了项目的可维护性且降低了开发难度。
+将对象之间的相互依赖关系交给 IoC 容器来管理，并由 IoC 容器完成对象的注入。这样可以很大程度上简化应用的开发，==把应用从复杂的依赖关系中解放出来==。  **IoC 容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件/注解即可，完全不用考虑对象是如何被创建出来的。** 在实际项目中一个 Service 类可能有几百甚至上千个类作为它的底层，假如我们需要实例化这个 Service，你可能要每次都要搞清这个 Service 所有底层类的构造函数，这可能会把人逼疯。如果利用 IoC 的话，你只需要配置好，然后在需要的地方引用就行了，这大大增加了项目的可维护性且降低了开发难度。
 
 Spring 时代我们一般通过 XML 文件来配置 Bean，后来开发人员觉得 XML 文件来配置不太好，于是 SpringBoot 注解配置就慢慢开始流行起来。
 
@@ -79,9 +79,13 @@ IoC源码阅读
 
 - https://javadoop.com/post/spring-ioc
 
+==BeanDefinition== 中保存了我们的 Bean 信息，比如这个 Bean 指向的是哪个类、是否是单例的、是否懒加载、这个 Bean 依赖了哪些 Bean 等等
+
+loadBeanDefinitions(加载bean的配置文件)-》doRegisterBeanDefinitions（解析bean的定义）->创建BeanDefinition-》注册-》
+
 #### AOP
 
-AOP(Aspect-Oriented Programming:面向切面编程)能够将那些与业务无关，**却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来**，便于**减少系统的重复代码**，**降低模块间的耦合度**，并**有利于未来的可拓展性和可维护性**。
+AOP(Aspect-Oriented Programming:面向切面编程)能够将那些与业务无关，==**却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来==**，便于**==减少系统的重复代码**，**降低模块间的耦合度==**，并**==有利于未来的可拓展性和可维护性==**。
 
 **Spring AOP就是基于动态代理的**，如果要代理的对象，实现了某个接口，那么Spring AOP会使用**JDK Proxy**，去创建代理对象，而对于没有实现接口的对象，就无法使用 JDK Proxy 去进行代理了，这时候Spring AOP会使用**Cglib** ，这时候Spring AOP会使用 **Cglib** 生成一个被代理对象的子类来作为代理，如下图所示：
 
@@ -93,7 +97,7 @@ AOP(Aspect-Oriented Programming:面向切面编程)能够将那些与业务无�
 
 ### 4.2 Spring AOP 和 AspectJ AOP 有什么区别？
 
-**Spring AOP 属于运行时增强，而 AspectJ 是编译时增强。** Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作(Bytecode Manipulation)。
+**Spring AOP 属于==运行时增强，==而 AspectJ ==是编译时增强==。** Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作(Bytecode Manipulation)。
 
  Spring AOP 已经集成了 AspectJ  ，AspectJ  应该算的上是 Java 生态系统中最完整的 AOP 框架了。AspectJ  相比于 Spring AOP 功能更加强大，但是 Spring AOP 相对来说更简单，
 
@@ -101,9 +105,9 @@ AOP(Aspect-Oriented Programming:面向切面编程)能够将那些与业务无�
 
 ## 5. Spring bean
 
-### 5.1 Spring 中的 bean 的作用域有哪些?
+### ==5.1 Spring 中的 bean 的作用域有哪些?==
 
-- singleton : 唯一 bean 实例，Spring 中的 bean 默认都是单例的。
+- singleton : ==唯一 bean 实例，Spring 中的 bean 默认都是单例的。==
 - prototype : 每次请求都会创建一个新的 bean 实例。
 - request : 每一次HTTP请求都会产生一个新的bean，该bean仅在当前HTTP request内有效。
 - session : 每一次HTTP请求都会产生一个新的 bean，该bean仅在当前 HTTP session 内有效。
@@ -208,7 +212,7 @@ public OneService getService(status) {
 
 Model2 模式下还存在很多问题，Model2的抽象和封装程度还远远不够，使用Model2进行开发时不可避免地会重复造轮子，这就大大降低了程序的可维护性和复用性。于是很多JavaWeb开发相关的 MVC 框架应运而生比如Struts2，但是 Struts2 比较笨重。随着 Spring 轻量级开发框架的流行，Spring 生态圈出现了 Spring MVC 框架， Spring MVC 是当前最优秀的 MVC 框架。相比于 Struts2 ， Spring MVC 使用更加简单和方便，开发效率更高，并且 Spring MVC 运行速度更快。
 
-MVC 是一种设计模式,Spring MVC 是一款很优秀的 MVC 框架。Spring MVC 可以帮助我们进行更简洁的Web层的开发，并且它天生与 Spring 框架集成。Spring MVC 下我们一般把后端项目分为 Service层（处理业务）、Dao层（数据库操作）、Entity层（实体类）、Controller层(控制层，返回数据给前台页面)。
+==MVC 是一种设计模式,Spring MVC 是一款很优秀的 MVC 框架。==Spring MVC 可以帮助我们进行更简洁的Web层的开发，并且它天生与 Spring 框架集成。Spring MVC 下我们一般把后端项目分为 Service层（处理业务）、Dao层（数据库操作）、Entity层（实体类）、Controller层(控制层，返回数据给前台页面)。
 
 **Spring MVC 的简单原理图如下：**
 

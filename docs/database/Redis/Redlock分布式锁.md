@@ -1,8 +1,12 @@
 这篇文章主要是对 Redis 官方网站刊登的 [Distributed locks with Redis](https://redis.io/topics/distlock) 部分内容的总结和翻译。
 
+# 分布式锁
+
+==分布式锁是控制分布式系统或不同系统之间共同访问共享资源的一种锁实现，==如果不同的系统或同一个系统的不同主机之间共享了某个资源时，往往需要互斥来防止彼此干扰来保证一致性。
+
 ## 什么是 RedLock
 
-Redis 官方站这篇文章提出了一种权威的基于 Redis 实现分布式锁的方式名叫 *Redlock*，此种方式比原先的单节点的方法更安全。它可以保证以下特性：
+Redis 官方站这篇文章提出了一种权威的==基于 Redis 实现分布式锁的方式名叫 *Redlock*==，此种方式比原先的单节点的方法更安全。它可以保证以下特性：
 
 1. 安全特性：互斥访问，即永远只有一个 client 能拿到锁
 2. 避免死锁：最终 client 都可能拿到锁，不会出现死锁的情况，即使原本锁住某资源的 client crash 了或者出现了网络分区
@@ -10,7 +14,23 @@ Redis 官方站这篇文章提出了一种权威的基于 Redis 实现分布式�
 
 ## 怎么在单节点上实现分布式锁
 
-> SET resource_name my_random_value NX PX 30000
+> ==SET resource_name my_random_value NX PX 30000==
+>
+> ==释放锁为del key，而且因为设置了过期时间，不会出现死锁问题==
+
+==set key value [ex seconds]  [px milliseconds]  [nx|xx] 设置值==
+
+ex seconds 为键设置秒级过期时间‘
+
+px milliseconds 为键设置毫秒级过期时间‘
+
+==nx 键必须不存在才可以设置成功，用于添加==
+
+xx 与nx相反，键必须存在才可以设置成功，用于更新
+
+除了set 选项，redis还提供了setnx和setex 两个命令。他们的作用和ex和nx选项是一样的。
+
+==上述属于悲观锁，乐观锁用watch==
 
 主要依靠上述命令，该命令仅当 Key 不存在时（NX保证）set 值，并且设置过期时间 3000ms （PX保证），值 my_random_value 必须是所有 client 和所有锁请求发生期间唯一的，释放锁的逻辑是：
 

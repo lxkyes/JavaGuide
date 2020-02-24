@@ -44,9 +44,13 @@
 
 ### 1.1. 说一说自己对于 synchronized 关键字的了解
 
+==可以保证共享变量的可见性==
+
+	 *线程解锁前,必须把共享变量的最新值刷新到主内存中
+	 *线程加锁时,将清空工作内存中共享变量的值,从而使用共享变量时需要从主内存中重新读取最新的值
 synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。
 
-另外，在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 Java 6 之后 Java 官方对从 JVM 层面对synchronized 较大优化，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。
+另外，在 Java 早期版本中，synchronized属于==重量级锁==，效率低下，因为==监视器锁（monitor）====（经常要用户态切换到内核态）==是依赖于底层的操作系统的 ==Mutex Lock== 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从==用户态转换到内核态==，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 ==Java 6 之后 Java 官方对从 JVM 层面对synchronized 较大优化==，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如==自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁==等技术来减少锁操作的开销。
 
 
 ### 1.2. 说说自己是怎么使用 synchronized 关键字，在项目中用到了吗
@@ -89,15 +93,15 @@ public class Singleton {
 ```
 另外，需要注意 uniqueInstance 采用 volatile 关键字修饰也是很有必要。
 
-uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：
+uniqueInstance 采用 volatile 关键字修饰也是很有必要的， uniqueInstance = new Singleton(); 这段代码其实是分为三步执行：==（因为指令顺序的原因，所以即使synchronized可以保证变量可见性，还是需要volatile修饰）==
 
-1. 为 uniqueInstance 分配内存空间
-2. 初始化 uniqueInstance
-3. 将 uniqueInstance 指向分配的内存地址
+1. ==为 uniqueInstance 分配内存空间==
+2. ==初始化 uniqueInstance==
+3. ==将 uniqueInstance 指向分配的内存地址==
 
-但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1->3->2。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。
+但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 ==1->3->2==。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 getUniqueInstance() 后发现 uniqueInstance 不为空，因此返回 uniqueInstance，但此时 uniqueInstance 还未被初始化。
 
-使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。
+使用 ==volatile 可以禁止 JVM 的指令重排==，保证在多线程环境下也能正常运行。
 
 ### 1.3. 讲一下 synchronized 关键字的底层原理
 
@@ -142,47 +146,65 @@ synchronized 修饰的方法并没有 monitorenter 指令和 monitorexit 指令�
 
 ### 1.4. 说说 JDK1.6 之后的synchronized 关键字底层做了哪些优化，可以详细介绍一下这些优化吗
 
-JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、自旋锁、适应性自旋锁、锁消除、锁粗化等技术来减少锁操作的开销。
+JDK1.6 对锁的实现引入了大量的优化，==如偏向锁、轻量级锁、自旋锁、适应性自旋锁、锁消除、锁粗化等技术来减少锁操作的开销==。
 
-锁主要存在四种状态，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态，他们会随着竞争的激烈而逐渐升级。注意锁可以升级不可降级，这种策略是为了提高获得锁和释放锁的效率。
+锁主要存在四种状态，依次是：==无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态==，他们会随着竞争的激烈而逐渐升级。注意锁可以升级不可降级，这种策略是为了提高获得锁和释放锁的效率。
 
 关于这几种优化的详细信息可以查看笔主的这篇文章：<https://gitee.com/SnailClimb/JavaGuide/blob/master/docs/java/Multithread/synchronized.md>
 
-### 1.5. 谈谈 synchronized和ReentrantLock 的区别
+https://www.jianshu.com/p/36eedeb3f912
 
+### 1.5. 谈谈 synchronized和ReentrantLock 的区别
 
 **① 两者都是可重入锁**
 
-两者都是可重入锁。“可重入锁”概念是：自己可以再次获取自己的内部锁。比如一个线程获得了某个对象的锁，此时这个对象锁还没有释放，当其再次想要获取这个对象的锁的时候还是可以获取的，如果不可锁重入的话，就会造成死锁。同一个线程每次获取锁，锁的计数器都自增1，所以要等到锁的计数器下降为0时才能释放锁。
+==两者都是可重入锁==。“可重入锁”概念是：自己可以再次获取自己的内部锁。比如一个线程获得了某个对象的锁，此时这个对象锁还没有释放，当其再次想要获取这个对象的锁的时候还是可以获取的，如果不可锁重入的话，就会造成死锁。同一个线程每次获取锁，锁的计数器都自增1，所以要等到锁的计数器下降为0时才能释放锁。
 
 **② synchronized 依赖于 JVM 而 ReentrantLock 依赖于 API**
 
-synchronized 是依赖于 JVM 实现的，前面我们也讲到了 虚拟机团队在 JDK1.6 为 synchronized 关键字进行了很多优化，但是这些优化都是在虚拟机层面实现的，并没有直接暴露给我们。ReentrantLock 是 JDK 层面实现的（也就是 API 层面，需要 lock() 和 unlock() 方法配合 try/finally 语句块来完成），所以我们可以通过查看它的源代码，来看它是如何实现的。
+==synchronized 是依赖于 JVM 实现的==，前面我们也讲到了 虚拟机团队在 JDK1.6 为 synchronized 关键字进行了很多优化，但是这些优化都是在虚拟机层面实现的，并没有直接暴露给我们。==ReentrantLock 是 JDK 层面实现的==（也就是 API 层面，需要 lock() 和 unlock() 方法配合 try/finally 语句块来完成），所以我们可以通过查看它的源代码，来看它是如何实现的。
 
-**③ ReentrantLock 比 synchronized 增加了一些高级功能**
+**③ ReentrantLock 比 synchronized ==增加了一些高级功能==**
 
 相比synchronized，ReentrantLock增加了一些高级功能。主要来说主要有三点：**①等待可中断；②可实现公平锁；③可实现选择性通知（锁可以绑定多个条件）**
 
-- **ReentrantLock提供了一种能够中断等待锁的线程的机制**，通过lock.lockInterruptibly()来实现这个机制。也就是说正在等待的线程可以选择放弃等待，改为处理其他事情。
+- **ReentrantLock提供了一种==能够中断等待锁==的线程的机制**，通过lock.lockInterruptibly()来实现这个机制。也就是说正在等待的线程可以选择放弃等待，改为处理其他事情。
 - **ReentrantLock可以指定是公平锁还是非公平锁。而synchronized只能是非公平锁。所谓的公平锁就是先等待的线程先获得锁。** ReentrantLock默认情况是非公平的，可以通过 ReentrantLock类的`ReentrantLock(boolean fair)`构造方法来制定是否是公平的。
-- synchronized关键字与wait()和notify()/notifyAll()方法相结合可以实现等待/通知机制，ReentrantLock类当然也可以实现，但是需要借助于Condition接口与newCondition() 方法。Condition是JDK1.5之后才有的，它具有很好的灵活性，比如可以实现多路通知功能也就是在一个Lock对象中可以创建多个Condition实例（即对象监视器），**线程对象可以注册在指定的Condition中，从而可以有选择性的进行线程通知，在调度线程上更加灵活。 在使用notify()/notifyAll()方法进行通知时，被通知的线程是由 JVM 选择的，用ReentrantLock类结合Condition实例可以实现“选择性通知”** ，这个功能非常重要，而且是Condition接口默认提供的。而synchronized关键字就相当于整个Lock对象中只有一个Condition实例，所有的线程都注册在它一个身上。如果执行notifyAll()方法的话就会通知所有处于等待状态的线程这样会造成很大的效率问题，而Condition实例的signalAll()方法 只会唤醒注册在该Condition实例中的所有等待线程。
+- synchronized关键字与wait()和notify()/notifyAll()方法相结合可以实现等待/通知机制，ReentrantLock类当然也可以实现，但是需要借助于Condition接口与newCondition() 方法。Condition是JDK1.5之后才有的，它具有很好的灵活性，比如可以实现多路通知功能也就是在一个Lock对象中可以创建多个Condition实例（即对象监视器），**线程对象可以注册在指定的Condition中，从而可以有选择性的进行线程通知，在调度线程上更加灵活。 在使用notify()/notifyAll()方法进行通知时，被通知的线程是由 JVM 选择的，用ReentrantLock类结合Condition实例可以实现“选择性通知”** ，==这个功能非常重要==，而且是Condition接口默认提供的。而synchronized关键字就相当于整个Lock对象中只有一个Condition实例，所有的线程都注册在它一个身上。如果执行notifyAll()方法的话就会通知所有处于等待状态的线程这样会造成很大的效率问题，而Condition实例的signalAll()方法 只会唤醒注册在该Condition实例中的所有等待线程。
 
 如果你想使用上述功能，那么选择ReentrantLock是一个不错的选择。
 
 **④ 性能已不是选择标准**
 
+### 1.6. ReentrantLock
+
+https://www.cnblogs.com/takumicx/p/9338983.html
+
+- ReentrantLock需要==手动==加锁和解锁,且解锁的操作尽量要放在finally代码块中,保证线程正确释放锁。
+
+- 和synchronized一样都是==独占锁==，且都是==可重入==的
+
 ## 2. volatile关键字
 
 ### 2.1. 讲一下Java内存模型
 
+==禁止指令重排==（底层利用lock前缀指令，相当于一个内存屏障，并且强制更新一个不同cpu缓存
 
-在 JDK1.2 之前，Java的内存模型实现总是从**主存**（即共享内存）读取变量，是不需要进行特别的注意的。而在当前的 Java 内存模型下，线程可以把变量保存**本地内存**（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成**数据的不一致**。
+==适用场景：==
+
+- 对变量的写操作不依赖于当前值。
+- 该变量没有包含在具有其他变量的不变式中。
+
+实际上，这些条件表明，可以被写入 volatile 变量的这些有效值**独立于任何程序的状态**，包括变量的当前状态。
+
+
+在 ==JDK1.2== 之前，Java的内存模型实现总是从==**主存**（即共享内存）==读取变量，是不需要进行特别的注意的。而在==当前==的 Java 内存模型下，==线程可以把变量保存**本地内存**（比如机器的寄存器）中，而不是直接在主存中进行读写。==这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成**数据的不一致**。
 
 ![数据不一致](https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/数据不一致.png)
 
-要解决这个问题，就需要把变量声明为**volatile**，这就指示 JVM，这个变量是不稳定的，每次使用它都到主存中进行读取。
+要解决这个问题，就需要把变量声明为**volatile**，这就指示 JVM，这个变量是不稳定的，==每次使用它都到主存中进行读取。==
 
-说白了， **volatile** 关键字的主要作用就是保证变量的可见性然后还有一个作用是防止指令重排序。
+说白了， **volatile** 关键字的主要作用就是==保证变量的可见性==然后还有一个作用是==防止指令重排序。==
 
 ![volatile关键字的可见性](https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-6/volatile关键字的可见性.png)
 
@@ -303,7 +325,7 @@ ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
 }
 ```
 
-从上面`Thread`类 源代码可以看出`Thread` 类中有一个 `threadLocals` 和 一个  `inheritableThreadLocals` 变量，它们都是 `ThreadLocalMap`  类型的变量,我们可以把 `ThreadLocalMap`  理解为`ThreadLocal` 类实现的定制化的 `HashMap`。默认情况下这两个变量都是null，只有当前线程调用 `ThreadLocal` 类的 `set`或`get`方法时才创建它们，实际上调用这两个方法的时候，我们调用的是`ThreadLocalMap`类对应的 `get()`、`set() `方法。
+从上面`Thread`类 源代码可以看出`Thread` 类中有一个 `threadLocals` 和 一个  `inheritableThreadLocals` 变量，它们都是 ==`ThreadLocalMap`==  类型的变量,我们可以把 `ThreadLocalMap`  理解为`ThreadLocal` 类实现的定制化的 `HashMap`。默认情况下这两个变量都是null，只有当前线程调用 `ThreadLocal` 类的 `set`或`get`方法时才创建它们，实际上调用这两个方法的时候，我们调用的是`ThreadLocalMap`类对应的 `get()`、`set() `方法。
 
 `ThreadLocal`类的`set()`方法
 
@@ -321,9 +343,9 @@ ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
     }
 ```
 
-通过上面这些内容，我们足以通过猜测得出结论：**最终的变量是放在了当前线程的 `ThreadLocalMap` 中，并不是存在 `ThreadLocal` 上，`ThreadLocal` 可以理解为只是`ThreadLocalMap`的封装，传递了变量值。** `ThrealLocal` 类中可以通过`Thread.currentThread()`获取到当前线程对象后，直接通过`getMap(Thread t)`可以访问到该线程的`ThreadLocalMap`对象。
+通过上面这些内容，我们足以通过猜测得出结论：==**最终的变量是放在了当前线程的 `ThreadLocalMap` 中，并不是存在 `ThreadLocal` 上，`ThreadLocal` 可以理解为只是`ThreadLocalMap`的封装，传递了变量值。==** `ThrealLocal` 类中可以通过`Thread.currentThread()`获取到当前线程对象后，直接通过`getMap(Thread t)`可以访问到该线程的`ThreadLocalMap`对象。
 
-**每个`Thread`中都具备一个`ThreadLocalMap`，而`ThreadLocalMap`可以存储以`ThreadLocal`为key的键值对。** 比如我们在同一个线程中声明了两个 `ThreadLocal` 对象的话，会使用 `Thread`内部都是使用仅有那个`ThreadLocalMap` 存放数据的，`ThreadLocalMap`的 key 就是 `ThreadLocal`对象，value 就是 `ThreadLocal` 对象调用`set`方法设置的值。`ThreadLocal` 是 map结构是为了让每个线程可以关联多个 `ThreadLocal`变量。这也就解释了 ThreadLocal 声明的变量为什么在每一个线程都有自己的专属本地变量。
+**每个`Thread`中都具备一个`ThreadLocalMap`，而`ThreadLocalMap`可以存储以`ThreadLocal`为key的键值对。** 比如我们在同一个线程中声明了两个 `ThreadLocal` 对象的话，会使用 `Thread`内部都是使用仅有那个`ThreadLocalMap` 存放数据的，`ThreadLocalMap`的 key 就是 `ThreadLocal`对象，value 就是 `ThreadLocal` 对象调用`set`方法设置的值。`ThreadLocal` 是 map结构是为了让每个线程可以关联多个 `ThreadLocal`变量。这也就解释了 ThreadLocal 声明的变量为什么在每一个线程都 有自己的专属本地变量。
 
 `ThreadLocalMap`是`ThreadLocal`的静态内部类。
 
@@ -331,7 +353,7 @@ ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
 
 ### 3.4. ThreadLocal 内存泄露问题
 
-`ThreadLocalMap` 中使用的 key 为 `ThreadLocal` 的弱引用,而 value 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉。这样一来，`ThreadLocalMap` 中就会出现key为null的Entry。假如我们不做任何措施的话，value 永远无法被GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap实现中已经考虑了这种情况，在调用 `set()`、`get()`、`remove()` 方法的时候，会清理掉 key 为 null 的记录。使用完 `ThreadLocal`方法后 最好手动调用`remove()`方法
+`ThreadLocalMap` 中使用的 ==key 为 `ThreadLocal` 的弱引用==,而 value 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，==在垃圾回收的时候==，key 会被清理掉，而 value 不会被清理掉。这样一来，`ThreadLocalMap` 中就会出现key为null的Entry。假如我们不做任何措施的话，value 永远无法被GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap实现中已经考虑了这种情况，在调用 `set()`、`get()`、`remove()` 方法的时候，会清理掉 key 为 null 的记录。使用完 `ThreadLocal`方法后 最好手动调用`remove()`方法
 
 ```java
       static class Entry extends WeakReference<ThreadLocal<?>> {
@@ -367,7 +389,7 @@ ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
 
 ### 4.2. 实现Runnable接口和Callable接口的区别
 
-`Runnable`自Java 1.0以来一直存在，但`Callable`仅在Java 1.5中引入,目的就是为了来处理`Runnable`不支持的用例。**`Runnable` 接口**不会返回结果或抛出检查异常，但是**`Callable` 接口**可以。所以，如果任务不需要返回结果或抛出异常推荐使用 **`Runnable` 接口**，这样代码看起来会更加简洁。
+`Runnable`自Java 1.0以来一直存在，但`Callable`仅在Java 1.5中引入,目的就是为了来处理`Runnable`不支持的用例。==**`Runnable` 接口**不会返回结果或抛出检查异常，但是**`Callable` 接口**可以==。所以，如果任务不需要返回结果或抛出异常推荐使用 **`Runnable` 接口**，这样代码看起来会更加简洁。
 
 工具类 `Executors` 可以实现 `Runnable` 对象和 `Callable` 对象之间的相互转换。（`Executors.callable（Runnable task`）或 `Executors.callable（Runnable task，Object resule）`）。
 
@@ -483,29 +505,36 @@ public interface Callable<V> {
 
 **下面这些对创建 非常重要，在后面使用线程池的过程中你一定会用到！所以，务必拿着小本本记清楚。**
 
-#### 4.5.1 `ThreadPoolExecutor`构造函数重要参数分析
+#### 4.5.1 ==`ThreadPoolExecutor`构造函数重要参数分析==
 
 **`ThreadPoolExecutor` 3 个最重要的参数：**
 
 - **`corePoolSize` :** 核心线程数线程数定义了最小可以同时运行的线程数量。
-- **`maximumPoolSize` :** 当队列中存放的任务达到队列容量的时候，当前可以同时运行的线程数量变为最大线程数。
+- **`maximumPoolSize` :** 当队列中存放的任务达到队列容量的时候，当前可以同时运行的线程数量==变为==最大线程数。
 - **`workQueue`:** 当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，新任务就会被存放在队列中。
 
 `ThreadPoolExecutor`其他常见参数:
 
 1. **`keepAliveTime`**:当线程池中的线程数量大于 `corePoolSize` 的时候，如果这时没有新的任务提交，核心线程外的线程不会立即销毁，而是会等待，直到等待的时间超过了 `keepAliveTime`才会被回收销毁；
+
 2. **`unit`** : `keepAliveTime` 参数的时间单位。
+
 3. **`threadFactory`** :executor 创建新线程的时候会用到。
+
 4. **`handler`** :饱和策略。关于饱和策略下面单独介绍一下。
 
-#### 4.5.2 `ThreadPoolExecutor` 饱和策略
+5. ```
+   ThreadFactory threadFactory` : 线程工厂，用于创建线程。默认使用`DefaultThreadFactory`。建议使用自定义的`ThreadFactory`，可以自定义线程的名字，如使用 `guava`的 `ThreadFactoryBuilder
+   ```
 
-**`ThreadPoolExecutor` 饱和策略定义:**
+#### 4.5.2 ==`ThreadPoolExecutor` 饱和策略==
+
+**`Threa dPoolExecutor` 饱和策略定义:**
 
 如果当前同时运行的线程数量达到最大线程数量并且队列也已经被放满了任时，`ThreadPoolTaskExecutor` 定义一些策略:
 
 - **`ThreadPoolExecutor.AbortPolicy`**：抛出 `RejectedExecutionException`来拒绝新任务的处理。
-- **`ThreadPoolExecutor.CallerRunsPolicy`**：调用执行自己的线程运行任务。您不会任务请求。但是这种策略会降低对于新任务提交速度，影响程序的整体性能。另外，这个策略喜欢增加队列容量。如果您的应用程序可以承受此延迟并且你不能任务丢弃任何一个任务请求的话，你可以选择这个策略。
+- **`ThreadPoolExecutor.CallerRunsPolicy`**：调用执行自己的线程运行任务。您不会任务请求。==但是这种策略会降低对于新任务提交速度，影响程序的整体性能==。另外，这个策略喜欢增加队列容量。如果您的应用程序可以承受此延迟并且你不能任务丢弃任何一个任务请求的话，你可以选择这个策略。==（中断主线程运行任务，）==
 - **`ThreadPoolExecutor.DiscardPolicy`：** 不处理新任务，直接丢弃掉。
 - **`ThreadPoolExecutor.DiscardOldestPolicy`：** 此策略将丢弃最早的未处理的任务请求。
 
@@ -794,7 +823,7 @@ AtomicInteger 类的部分源码：
     private volatile int value;
 ```
 
-AtomicInteger 类主要利用 CAS (compare and swap) + volatile 和 native 方法来保证原子操作，从而避免 synchronized 的高开销，执行效率大为提升。
+==AtomicInteger 类主要利用 CAS (compare and swap) + volatile 和 native 方法来保证原子操作，从而避免 synchronized 的高开销，执行效率大为提升。==
 
 CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。UnSafe 类的 objectFieldOffset() 方法是一个本地方法，这个方法是用来拿到“原来的值”的内存地址，返回值是 valueOffset。另外 value 是一个volatile变量，在内存中可见，因此 JVM 可以保证任何时刻任何线程总能拿到该变量的最新值。
 
@@ -803,6 +832,8 @@ CAS的原理是拿期望的值和原本的一个值作比较，如果相同则�
 ## 6. AQS
 
 ### 6.1. AQS 介绍
+
+https://blog.csdn.net/mulinsen77/article/details/84583716
 
 AQS的全称为（AbstractQueuedSynchronizer），这个类在java.util.concurrent.locks包下面。
 
@@ -814,7 +845,7 @@ AQS是一个用来构建锁和同步器的框架，使用AQS能简单且高效�
 
 AQS 原理这部分参考了部分博客，在5.2节末尾放了链接。
 
-> 在面试中被问到并发知识的时候，大多都会被问到“请你说一下自己对于AQS原理的理解”。下面给大家一个示例供大家参加，面试不是背题，大家一定要加入自己的思想，即使加入不了自己的思想也要保证自己能够通俗的讲出来而不是背出来。
+> 在面试中被问到并发知识的时候，==大多都会被问到“请你说一下自己对于AQS原理的理解”==。下面给大家一个示例供大家参加，面试不是背题，大家一定要加入自己的思想，即使加入不了自己的思想也要保证自己能够通俗的讲出来而不是背出来。
 
 下面大部分内容其实在AQS类注释上已经给出了，不过是英语看着比较吃力一点，感兴趣的话可以看看源码。
 
@@ -905,7 +936,17 @@ tryReleaseShared(int)//共享方式。尝试释放资源，成功则返回true�
 - **CountDownLatch （倒计时器）：** CountDownLatch是一个同步工具类，用来协调多个线程之间的同步。这个工具通常用来控制线程等待，它可以让某一个线程等待直到倒计时结束，再开始执行。
 - **CyclicBarrier(循环栅栏)：** CyclicBarrier 和 CountDownLatch 非常类似，它也可以实现线程间的技术等待，但是它的功能比 CountDownLatch 更加复杂和强大。主要应用场景和 CountDownLatch 类似。CyclicBarrier 的字面意思是可循环使用（Cyclic）的屏障（Barrier）。它要做的事情是，让一组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所有被屏障拦截的线程才会继续干活。CyclicBarrier默认的构造方法是 CyclicBarrier(int parties)，其参数表示屏障拦截的线程数量，每个线程调用await()方法告诉 CyclicBarrier 我已经到达了屏障，然后当前线程被阻塞。
 
-## 7 Reference
+## 7 CAS
+
+CAS：Compare and Swap，即比较再交换。
+
+缺点：
+
+- 只能保证对一个变量的原子性操作
+- 长时间自旋会给cpu带来压力
+- aba问题
+
+## 8 Reference
 
 - 《深入理解 Java 虚拟机》
 - 《实战 Java 高并发程序设计》

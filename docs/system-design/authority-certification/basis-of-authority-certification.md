@@ -97,13 +97,13 @@ public String readAllCookies(HttpServletRequest request) {
 - [Guide to Spring Session](https://www.baeldung.com/spring-session)
 - [Sticky Sessions with Spring Session & Redis](https://medium.com/@gvnix/sticky-sessions-with-spring-session-redis-bdc6f7438cc3)
 
-## 4. 什么是 Token?什么是 JWT?如何基于Token进行身份验证？
+## 4. 什么是 Token?什么是 JWT?如何==基于Token进行身份验证==？
 
 我们在上一个问题中探讨了使用 Session 来鉴别用户的身份，并且给出了几个 Spring Session 的案例分享。 我们知道 Session  信息需要保存一份在服务器端。这种方式会带来一些麻烦，比如需要我们保证保存  Session  信息服务器的可用性、不适合移动端（依赖Cookie）等等。
 
 有没有一种不需要自己存放 Session  信息就能实现身份验证的方式呢？使用 Token 即可！JWT （JSON Web Token） 就是这种方式的实现，通过这种方式服务器端就不需要保存 Session 数据了，只用在客户端保存服务端返回给客户的 Token 就可以了，扩展性得到提升。
 
-**JWT 本质上就一段签名的 JSON 格式的数据。由于它是带有签名的，因此接收者便可以验证它的真实性。**
+**JWT 本质上就==一段签名的 JSON 格式的数据==。由于它是带有签名的，因此接收者便可以验证它的真实性。**
 
 下面是 [RFC 7519](https://tools.ietf.org/html/rfc7519) 对 JWT 做的较为正式的定义。
 

@@ -15,9 +15,10 @@
 <!-- /MarkdownTOC -->
 
 ## <font face="楷体" id="1">简介</font>
-<font color="red">LinkedList</font>是一个实现了<font color="red">List接口</font>和<font color="red">Deque接口</font>的<font color="red">双端链表</font>。 
+<font color="red">LinkedList</font>是一个实现了<font color="red">List接口</font>和<font color="red">Deque接口</font>的==<font color="red">双端链表</font>==。 
 LinkedList底层的链表结构使它<font color="red">支持高效的插入和删除操作</font>，另外它实现了Deque接口，使得LinkedList类也具有队列的特性;
 LinkedList<font color="red">不是线程安全的</font>，如果想使LinkedList变成线程安全的，可以调用静态类<font color="red">Collections类</font>中的<font color="red">synchronizedList</font>方法： 
+
 ```java
 List list=Collections.synchronizedList(new LinkedList(...));
 ```

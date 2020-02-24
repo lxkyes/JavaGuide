@@ -75,7 +75,7 @@
 * **[Java 基础知识回顾](docs/java/Java基础知识.md)**
 * **[Java 基础知识疑难点/易错点](docs/java/Java疑难点.md)**
 * **[一些重要的Java程序设计题](docs/java/Java程序设计题.md)**
-* [J2EE 基础知识回顾](docs/java/J2EE基础知识.md)
+* ==[J2EE 基础知识回顾](docs/java/J2EE基础知识.md)==(未)
 
 **重要知识点详解：**
 
@@ -92,7 +92,7 @@
 
 * [ArrayList 源码学习](docs/java/collection/ArrayList.md)  
 * [LinkedList 源码学习](docs/java/collection/LinkedList.md)   
-* [HashMap(JDK1.8)源码学习](docs/java/collection/HashMap.md)  
+* ==[HashMap(JDK1.8)源码学习](docs/java/collection/HashMap.md)==  
 
 ### 并发
 
@@ -101,7 +101,7 @@
 * **[Java 并发基础常见面试题总结](docs/java/Multithread/JavaConcurrencyBasicsCommonInterviewQuestionsSummary.md)**
 * **[Java 并发进阶常见面试题总结](docs/java/Multithread/JavaConcurrencyAdvancedCommonInterviewQuestions.md)**
 
-**必备知识点：**
+**必备知识点：** 
 
 * [并发容器总结](docs/java/Multithread/并发容器总结.md)
 * **[Java线程池学习总结](./docs/java/Multithread/java线程池学习总结.md)**
@@ -109,18 +109,18 @@
 * [JUC 中的 Atomic 原子类总结](docs/java/Multithread/Atomic.md)
 * [AQS 原理以及 AQS 同步组件总结](docs/java/Multithread/AQS.md)
 
-### JVM
+### ==JVM==
 
 * **[一 Java内存区域](docs/java/jvm/Java内存区域.md)**
 * **[二 JVM垃圾回收](docs/java/jvm/JVM垃圾回收.md)**
 * [三 JDK 监控和故障处理工具](docs/java/jvm/JDK监控和故障处理工具总结.md)
-* [四 类文件结构](docs/java/jvm/类文件结构.md)
+* [四 类文件结构](docs/java/jvm/类文件结构.md) 
 * **[五 类加载过程](docs/java/jvm/类加载过程.md)**
 * [六 类加载器](docs/java/jvm/类加载器.md)
 * **[【待完成】八 最重要的 JVM 参数指南（翻译完善了一半）](docs/java/jvm/最重要的JVM参数指南.md)**
 * [九 JVM 配置常用参数和常用 GC 调优策略](docs/java/jvm/GC调优参数.md)
 
-### I/O
+### ==I/O==
 
 * [BIO,NIO,AIO 总结 ](docs/java/BIO-NIO-AIO.md)
 * [Java IO 与 NIO系列文章](docs/java/Java%20IO与NIO.md)
@@ -157,31 +157,40 @@
 
 ### 算法
 
-- [算法学习资源推荐](docs/dataStructures-algorithms/算法学习资源推荐.md)  
+- [算法学习资源推荐](docs/dataStructures-algorithms/算法学习资源推荐.md)   	
+
 - [几道常见的字符串算法题总结 ](docs/dataStructures-algorithms/几道常见的子符串算法题.md)
+
 - [几道常见的链表算法题总结 ](docs/dataStructures-algorithms/几道常见的链表算法题.md)   
+
 - [剑指offer部分编程题](docs/dataStructures-algorithms/剑指offer部分编程题.md)
+
 - [公司真题](docs/dataStructures-algorithms/公司真题.md)
+
 - [回溯算法经典案例之N皇后问题](docs/dataStructures-algorithms/Backtracking-NQueens.md)
+
+- [排序](sort.md)
+
+  
 
 ## 数据库
 
 ### MySQL
 
-* **[【推荐】MySQL/数据库 知识点总结](docs/database/MySQL.md)**
+* ==**[【推荐】MySQL/数据库 知识点总结](docs/database/MySQL.md)**==
 * **[阿里巴巴开发手册数据库部分的一些最佳实践](docs/database/阿里巴巴开发手册数据库部分的一些最佳实践.md)**
-* **[一千行MySQL学习笔记](docs/database/一千行MySQL命令.md)**
+* ==**[一千行MySQL学习笔记](docs/database/一千行MySQL命令.md)**==
 * [MySQL高性能优化规范建议](docs/database/MySQL高性能优化规范建议.md)
-* [数据库索引总结](docs/database/MySQL%20Index.md)
-* [事务隔离级别(图文详解)](docs/database/事务隔离级别(图文详解).md)
-* [一条SQL语句在MySQL中如何执行的](docs/database/一条sql语句在mysql中如何执行的.md)
+* ==[数据库索引总结](docs/database/MySQL%20Index.md)==
+* ==[事务隔离级别(图文详解)](docs/database/事务隔离级别(图文详解).md)==
+* ==[一条SQL语句在MySQL中如何执行的](docs/database/一条sql语句在mysql中如何执行的.md)==
 
 ### Redis
 
 * [Redis 总结](docs/database/Redis/Redis.md)
-* [Redlock分布式锁](docs/database/Redis/Redlock分布式锁.md)
+* [Redlock分布式锁](docs/database/Redis/Redlock分布式锁.md) 
 * [如何做可靠的分布式锁，Redlock真的可行么](docs/database/Redis/如何做可靠的分布式锁，Redlock真的可行么.md)
-* [几种常见的 Redis 集群以及使用场景](docs/database/Redis/redis集群以及应用场景.md) 
+* [几种常见的 Redis 集群以及使用场景](docs/database/Redis/redis集群以及应用场景.md) ==未==
 
 ### 数据库扩展
 
@@ -196,16 +205,20 @@
 - [Spring 学习与面试](docs/system-design/framework/spring/Spring.md)
 - **[Spring 常见问题总结](docs/system-design/framework/spring/SpringInterviewQuestions.md)**
 - [Spring中 Bean 的作用域与生命周期](docs/system-design/framework/spring/SpringBean.md)
-- [SpringMVC 工作原理详解](docs/system-design/framework/spring/SpringMVC-Principle.md)
+- ==[SpringMVC 工作原理详解](docs/system-design/framework/spring/SpringMVC-Principle.md)==
 - [Spring中都用到了那些设计模式?](docs/system-design/framework/spring/Spring-Design-Patterns.md)
 
 #### SpringBoot
 
-- **[SpringBoot 指南/常见面试题总结](https://github.com/Snailclimb/springboot-guide)**
+- ==**[SpringBoot 指南/常见面试题总结](https://github.com/Snailclimb/springboot-guide)**==（未）
+
+#### Mybatis
+
+- [Mybatis常见面试题及简介](Mybatis.md)
 
 ### 数据通信/中间件
 
-- [数据通信(RESTful、RPC、消息队列)相关知识点总结](docs/system-design/data-communication/summary.md)
+- [数据通信(RESTful、RPC、消息队列)相关知识点总结](docs/system-design/data-communication/summary.md)==（消息队列很多没看）==
 
 #### RPC
 
@@ -218,20 +231,20 @@
 - [RabbitMQ 入门](docs/system-design/data-communication/rabbitmq.md)
 - [RocketMQ 入门](docs/system-design/data-communication/RocketMQ.md)
 - [RocketMQ的几个简单问题与答案](docs/system-design/data-communication/RocketMQ-Questions.md)
-- [Kafka入门看这一篇就够了](docs/system-design/data-communication/Kafka入门看这一篇就够了.md)
+- ==[Kafka入门看这一篇就够了](docs/system-design/data-communication/Kafka入门看这一篇就够了.md)==（未）
 - [Kafka系统设计开篇-面试看这篇就够了](docs/system-design/data-communication/Kafka系统设计开篇-面试看这篇就够了.md)
 
 ### 权限认证
 
 - **[权限认证基础:区分Authentication,Authorization以及Cookie、Session、Token](docs/system-design/authority-certification/basis-of-authority-certification.md)**
 - **[JWT 优缺点分析以及常见问题解决方案](docs/system-design/authority-certification/JWT-advantages-and-disadvantages.md)**
-- **[适合初学者入门 Spring Security With JWT 的 Demo](https://github.com/Snailclimb/spring-security-jwt-guide)**
+- ==**[适合初学者入门 Spring Security With JWT 的 Demo](https://github.com/Snailclimb/spring-security-jwt-guide)**==（未）
 
 ### 分布式 & 微服务
 
 - [分布式应该学什么](docs/system-design/website-architecture/分布式.md)
 
-#### API 网关
+#### ==API 网关==（未）
 
 网关主要用于请求转发、安全认证、协议转换、容灾。
 
@@ -247,7 +260,7 @@
 
 #### 服务治理：服务注册与发现、服务路由控制
 
-**ZooKeeper:**
+==**ZooKeeper:**==（未）
 
 > 前两篇文章可能有内容重合部分，推荐都看一遍。
 

@@ -29,7 +29,7 @@
 
 RabbitMQ 是采用 Erlang 语言实现 AMQP(Advanced Message Queuing Protocol，高级消息队列协议）的消息中间件，它最初起源于金融系统，用于在分布式系统中存储转发消息。
 
-RabbitMQ 发展到今天，被越来越多的人认可，这和它在易用性、扩展性、可靠性和高可用性等方面的卓著表现是分不开的。RabbitMQ 的具体特点可以概括为以下几点：
+RabbitMQ 发展到今天，被越来越多的人认可，这和它在==易用性、扩展性、可靠性和高可用性==等方面的卓著表现是分不开的。RabbitMQ 的具体特点可以概括为以下几点：
 
 - **可靠性：** RabbitMQ使用一些机制来保证消息的可靠性，如持久化、传输确认及发布确认等。
 - **灵活的路由：** 在消息进入队列之前，通过交换器来路由消息。对于典型的路由功能，RabbitMQ 己经提供了一些内置的交换器来实现。针对更复杂的路由功能，可以将多个交换器绑定在一起，也可以通过插件机制来实现自己的交换器。这个后面会在我们将 RabbitMQ 核心概念的时候详细介绍到。
@@ -77,7 +77,7 @@ Binding(绑定) 示意图：
 
 ![Binding(绑定) 示意图](http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/70553134.jpg)
 
-生产者将消息发送给交换器时，需要一个RoutingKey,当 BindingKey 和 RoutingKey 相匹配时，消息会被路由到对应的队列中。在绑定多个队列到同一个交换器的时候，这些绑定允许使用相同的 BindingKey。BindingKey 并不是在所有的情况下都生效，它依赖于交换器类型，比如fanout类型的交换器就会无视，而是将消息路由到所有绑定到该交换器的队列中。
+==生产者将消息发送给交换器时，需要一个RoutingKey,当 BindingKey 和 RoutingKey 相匹配时，消息会被路由到对应的队列中。==在绑定多个队列到同一个交换器的时候，这些绑定允许使用相同的 BindingKey。BindingKey 并不是在所有的情况下都生效，它依赖于交换器类型，比如fanout类型的交换器就会无视，而是将消息路由到所有绑定到该交换器的队列中。
 
 #### 1.2.3 Queue(消息队列)
 
@@ -123,7 +123,7 @@ direct 类型常用在处理有优先级的任务，根据任务的优先级把�
 
 - RoutingKey 为一个点号“．”分隔的字符串（被点号“．”分隔开的每一段独立的字符串称为一个单词），如 “com.rabbitmq.client”、“java.util.concurrent”、“com.hidden.client”;
 - BindingKey 和 RoutingKey 一样也是点号“．”分隔的字符串；
-- BindingKey 中可以存在两种特殊字符串“*”和“#”，用于做模糊匹配，其中“*”用于匹配一个单词，“#”用于匹配多个单词(可以是零个)。
+- BindingKey 中可以存在两种特殊字符串“*”和“#”，用于做==模糊匹配==，其中“*”用于匹配一个单词，“#”用于匹配多个单词(可以是零个)。
 
 ![topic 类型交换器](http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-12-16/73843.jpg)
 

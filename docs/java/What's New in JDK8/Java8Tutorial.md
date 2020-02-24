@@ -46,12 +46,12 @@
 
 # Java 8 Tutorial 
 
-欢迎阅读我对Java 8的介绍。本教程将逐步指导您完成所有新语言功能。 在简短的代码示例的基础上，您将学习如何使用默认接口方法，lambda表达式，方法引用和可重复注释。 在本文的最后，您将熟悉最新的 API 更改，如流，函数式接口(Functional Interfaces)，Map 类的扩展和新的 Date API。 没有大段枯燥的文字，只有一堆注释的代码片段。
+欢迎阅读我对Java 8的介绍。本教程将逐步指导您完成所有新语言功能。 在简短的代码示例的基础上，您将学习如何使用==默认接口方法，lambda表达式，方法引用和可重复注释==。 在本文的最后，您==将熟悉最新的 API 更改，如流，函数式接口(Functional Interfaces)，Map 类的扩展和新的 Date API==。 没有大段枯燥的文字，只有一堆注释的代码片段。
 
 
 ### 接口的默认方法(Default Methods for Interfaces)
 
-Java 8使我们能够通过使用 `default` 关键字向接口添加非抽象方法实现。 此功能也称为[虚拟扩展方法](http://stackoverflow.com/a/24102730)。
+Java 8使我们能够通过使用 `default` 关键字向==接口==添加非抽象方法实现。 此功能也称为[虚拟扩展方法](http://stackoverflow.com/a/24102730)。
 
 第一个例子：
 
@@ -136,7 +136,7 @@ List 类本身就有一个 `sort` 方法。并且Java编译器可以自动推导
 
 **译者注：** 原文对这部分解释不太清楚，故做了修改！
 
-Java 语言设计者们投入了大量精力来思考如何使现有的函数友好地支持Lambda。最终采取的方法是：增加函数式接口的概念。**“函数式接口”是指仅仅只包含一个抽象方法,但是可以有多个非抽象方法(也就是上面提到的默认方法)的接口。** 像这样的接口，可以被隐式转换为lambda表达式。`java.lang.Runnable` 与 `java.util.concurrent.Callable` 是函数式接口最典型的两个例子。Java 8增加了一种特殊的注解`@FunctionalInterface`,但是这个注解通常不是必须的(某些情况建议使用)，只要接口只包含一个抽象方法，虚拟机会自动判断该接口为函数式接口。一般建议在接口上使用`@FunctionalInterface` 注解进行声明，这样的话，编译器如果发现你标注了这个注解的接口有多于一个抽象方法的时候会报错的，如下图所示
+Java 语言设计者们投入了大量精力来思考如何使现有的函数==友好地支持Lambda==。最终采取的方法是：增加函数式接口的概念。**==“函数式接口”是指仅仅只包含一个抽象方法,但是可以有多个非抽象方法(也就是上面提到的默认方法)的接口。==** 像这样的接口，可以被隐式转换为lambda表达式。`java.lang.Runnable` 与 `java.util.concurrent.Callable` 是函数式接口最典型的两个例子。Java 8增加了一种特殊的注解`@FunctionalInterface`,但是这个注解通常不是必须的(某些情况建议使用)，只要接口只包含一个抽象方法，虚拟机会自动判断该接口为函数式接口。一般建议在接口上使用`@FunctionalInterface` 注解进行声明，这样的话，编译器如果发现你标注了这个注解的接口有多于一个抽象方法的时候会报错的，如下图所示
 
 ![@FunctionalInterface 注解](https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-2/@FunctionalInterface.png)
 
@@ -275,7 +275,7 @@ class Lambda4 {
 
 还记得第一节中的 formula 示例吗？ `Formula` 接口定义了一个默认方法`sqrt`，可以从包含匿名对象的每个 formula 实例访问该方法。 这不适用于lambda表达式。
 
-无法从 lambda 表达式中访问默认方法,故以下代码无法编译：
+==无法从 lambda 表达式中访问默认方法==,故以下代码无法编译：
 
 ```java
 Formula formula = (a) -> sqrt(a * 100);
@@ -584,7 +584,7 @@ concat = Stream.of("a", "B", "c", "D", "e", "F").
  reduce("", String::concat);
 ```
 
-上面代码例如第一个示例的 reduce()，第一个参数（空白字符）即为起始值，第二个参数（String::concat）为 BinaryOperator。这类有起始值的 reduce() 都返回具体的对象。而对于第四个示例没有起始值的 reduce()，由于可能没有足够的元素，返回的是 Optional，请留意这个区别。更多内容查看： [IBM：Java 8 中的 Streams API 详解](https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/index.html) 
+上面代码例如第一个示例的 reduce()，第一个参数（空白字符）即为起始值，第二个参数（String::concat）为 BinaryOperator。这类有起始值的 reduce() 都返回具体的对象。而对于第四个示例没有起始值的 reduce()，==由于可能没有足够的元素，返回的是 Optional==?，请留意这个区别。更多内容查看： [IBM：Java 8 中的 Streams API 详解](https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/index.html) 
 
 ## Parallel Streams(并行流)
 

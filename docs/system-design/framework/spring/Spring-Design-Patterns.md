@@ -48,7 +48,7 @@ Spring使用工厂模式可以通过 `BeanFactory` 或 `ApplicationContext` 创�
 
 **两者对比：**
 
--  `BeanFactory` ：延迟注入(使用到某个 bean 的时候才会注入),相比于`ApplicationContext` 来说会占用更少的内存，程序启动速度更快。
+-  `BeanFactory` ：延迟注入(==使用到某个 bean 的时候才会注入==),相比于`ApplicationContext` 来说会占用更少的内存，程序启动速度更快。
 - `ApplicationContext` ：容器启动的时候，不管你用没用到，一次性创建所有 bean 。`BeanFactory` 仅提供了最基本的依赖注入支持，` ApplicationContext` 扩展了 `BeanFactory` ,除了有`BeanFactory`的功能还有额外更多功能，所以一般开发人员使用` ApplicationContext`会更多。
 
 ApplicationContext的三个实现类：
@@ -193,7 +193,7 @@ Spring 中 `jdbcTemplate`、`hibernateTemplate` 等以 Template 结尾的对数�
 
 ## 观察者模式
 
-观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，这个对象所依赖的对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。
+观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，这个对象所依赖的对象也会做出反应。==Spring 事件驱动模型==就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。
 
 ### Spring 事件驱动模型中的三种角色
 

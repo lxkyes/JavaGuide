@@ -353,6 +353,8 @@ set(val1, val2, val3...)
 
 ### 建表规范
 
+https://www.cnblogs.com/wsg25/p/9615100.html
+
 ```mysql
 /* 建表规范 */ ------------------
     -- Normal Format, NF
