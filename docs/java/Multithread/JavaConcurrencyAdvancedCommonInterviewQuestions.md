@@ -50,6 +50,12 @@
 	 *线程加锁时,将清空工作内存中共享变量的值,从而使用共享变量时需要从主内存中重新读取最新的值
 synchronized关键字解决的是多个线程之间访问资源的同步性，synchronized关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。
 
+重量级锁实现原理：
+
+https://www.jianshu.com/p/c3313dcf2c23
+
+==相当于每个对象都有一把锁和他关联。==
+
 另外，在 Java 早期版本中，synchronized属于==重量级锁==，效率低下，因为==监视器锁（monitor）====（经常要用户态切换到内核态）==是依赖于底层的操作系统的 ==Mutex Lock== 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从==用户态转换到内核态==，这个状态之间的转换需要相对比较长的时间，时间成本相对较高，这也是为什么早期的 synchronized 效率低的原因。庆幸的是在 ==Java 6 之后 Java 官方对从 JVM 层面对synchronized 较大优化==，所以现在的 synchronized 锁效率也优化得很不错了。JDK1.6对锁的实现引入了大量的优化，如==自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁==等技术来减少锁操作的开销。
 
 
@@ -154,7 +160,7 @@ JDK1.6 对锁的实现引入了大量的优化，==如偏向锁、轻量级锁�
 
 https://www.jianshu.com/p/36eedeb3f912
 
-### 1.5. 谈谈 synchronized和ReentrantLock 的区别
+### ==1.5. 谈谈 synchronized和ReentrantLock 的区别==
 
 **① 两者都是可重入锁**
 
@@ -345,7 +351,7 @@ ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
 
 通过上面这些内容，我们足以通过猜测得出结论：==**最终的变量是放在了当前线程的 `ThreadLocalMap` 中，并不是存在 `ThreadLocal` 上，`ThreadLocal` 可以理解为只是`ThreadLocalMap`的封装，传递了变量值。==** `ThrealLocal` 类中可以通过`Thread.currentThread()`获取到当前线程对象后，直接通过`getMap(Thread t)`可以访问到该线程的`ThreadLocalMap`对象。
 
-**每个`Thread`中都具备一个`ThreadLocalMap`，而`ThreadLocalMap`可以存储以`ThreadLocal`为key的键值对。** 比如我们在同一个线程中声明了两个 `ThreadLocal` 对象的话，会使用 `Thread`内部都是使用仅有那个`ThreadLocalMap` 存放数据的，`ThreadLocalMap`的 key 就是 `ThreadLocal`对象，value 就是 `ThreadLocal` 对象调用`set`方法设置的值。`ThreadLocal` 是 map结构是为了让每个线程可以关联多个 `ThreadLocal`变量。这也就解释了 ThreadLocal 声明的变量为什么在每一个线程都 有自己的专属本地变量。
+**==每个`Thread`中都具备一个`ThreadLocalMap`，==而`ThreadLocalMap`可以存储以`ThreadLocal`为key的键值对。** 比如我们在同一个线程中声明了两个 `ThreadLocal` 对象的话，会使用 `Thread`内部都是使用仅有那个`ThreadLocalMap` 存放数据的，`ThreadLocalMap`的 key 就是 `ThreadLocal`对象，value 就是 `ThreadLocal` 对象调用`set`方法设置的值。`ThreadLocal` 是 map结构是为了让每个线程可以关联多个 `ThreadLocal`变量。这也就解释了 ThreadLocal 声明的变量为什么在每一个线程都 有自己的专属本地变量。
 
 `ThreadLocalMap`是`ThreadLocal`的静态内部类。
 
@@ -832,6 +838,8 @@ CAS的原理是拿期望的值和原本的一个值作比较，如果相同则�
 ## 6. AQS
 
 ### 6.1. AQS 介绍
+
+==**自定义同步器在实现时只需要实现共享资源state的获取与释放方式即可**==
 
 https://blog.csdn.net/mulinsen77/article/details/84583716
 

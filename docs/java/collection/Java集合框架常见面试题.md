@@ -112,7 +112,7 @@ public interface RandomAccess {
 2. **效率：** 因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；（==ConcurrentHashMap是他的替代==）
 3. **对Null key 和Null value的支持：** HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。。但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。
 4. **初始容量大小和每次扩充容量大小的不同 ：** ①创建时如果不指定容量初始值，Hashtable 默认的初始大小为==11==，之后每次扩充，容量变为原来的==2n+1==。HashMap 默认的初始化大小为==16==。之后每次扩充，容量变为原来的==2倍==。②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小，而 HashMap 会将其扩充为==2的幂次方大小==（HashMap 中的`tableSizeFor()`方法保证，下面给出了源代码）。也就是说 HashMap 总是使用2的幂作为哈希表的大小,后面会介绍到为什么是2的幂次方。
-5. **底层数据结构：** ==JDK1.8== 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。
+5. **底层数据结构：** ==JDK1.8== 以后的 HashMap 在解决哈希冲突时有了较大的变化，==当链表长度大于阈值（默认为8）时，将链表转化为红黑树（需要数组长度大于64，不然会resize而不是变成红黑==树），以减少搜索时间。Hashtable 没有这样的机制。
 6. HashMap的迭代器(Iterator)是==fail-fast迭代器==，而Hashtable的enumerator迭代器不是fail-fast的。==fail-fast 机制是java集合(Collection)中的一种错误机制。当多个线程对同一个集合的内容进行操作时，就可能会产生fail-fast事件。通过modCount 和expectedModCount来判断。每次改变元素个数的时候modCount就会改变。==
 
 红黑树介绍：
@@ -251,7 +251,7 @@ static int hash(int h) {
 
 ## HashMap 多线程操作导致死循环问题
 
-==主要原因在于 并发下的Rehash 会造成元素之间会形成一个循环链表。==不过，jdk 1.8 后解决了这个问题，但是还是不建议在多线程下使用 HashMap,因为多线程下使用 HashMap 还是会存在其他问题比如数据丢失。并发环境下推荐使用 ConcurrentHashMap 。
+==主要原因在于 并发下的Rehash 会造成元素之间会形成一个循环链表。==不过，jdk 1.8 后解决了这个问题（==改成尾插法==），但是还是不建议在多线程下使用 HashMap,因为多线程下使用 HashMap 还是会存在其他问题比如数据丢失。并发环境下推荐使用 ConcurrentHashMap 。
 
 详情请查看：<https://coolshell.cn/articles/9606.html>
 
@@ -297,7 +297,7 @@ static class Segment<K,V> extends ReentrantLock implements Serializable {
 
 ### JDK1.8 （上面有示意图）
 
-ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）
+ConcurrentHashMap取消了Segment分段锁，采用==CAS和synchronized来保证并发安全==。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(log(N))）
 
 ==synchronized只锁定当前链表或红黑二叉树的首节点（如果当前数组的该位置为空，则用cas自旋）==，这样只要hash不冲突，就不会产生并发，效率又提升N倍。
 

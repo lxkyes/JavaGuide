@@ -439,7 +439,7 @@ optional.ifPresent((s) -> System.out.println(s.charAt(0)));     // "b"
 
 ## Streams(流)
 
-`java.util.Stream` 表示能应用在一组元素上一次执行的操作序列。Stream 操作分为中间操作或者最终操作两种，最终操作返回一特定类型的计算结果，而中间操作返回Stream本身，这样你就可以将多个操作依次串起来。Stream 的创建需要指定一个数据源，比如` java.util.Collection` 的子类，List 或者 Set， Map 不支持。Stream 的操作可以串行执行或者并行执行。
+`java.util.Stream` 表示能应用在一组元素上一次执行的操作序列。Stream 操作分为==中间操作或者最终操作==两种，最终操作返回一特定类型的计算结果，而中间操作返回Stream本身，这样你就可以将多个操作依次串起来。Stream 的创建需要指定一个数据源，==比如` java.util.Collection` 的子类，List 或者 Set==， Map 不支持。Stream 的操作可以串行执行或者并行执行。
 
 首先看看Stream是怎么用，首先创建实例代码的用到的数据List：
 
@@ -492,7 +492,7 @@ forEach 是为 Lambda 而设计的，保持了最紧凑的风格。而且 Lambda
 
 ### Map(映射)
 
-中间操作 map 会将元素根据指定的 Function 接口来依次将元素转成另外的对象。
+中间操作 map 会将元素根据==指定的 Function 接口来依次将元素转成另外的对象==。
 
 下面的示例展示了将字符串转换为大写字符串。你也可以通过map来将对象转换成其他类型，map返回的Stream类型是根据你map传递进去的函数的返回值决定的。
 
@@ -509,7 +509,7 @@ forEach 是为 Lambda 而设计的，保持了最紧凑的风格。而且 Lambda
 
 ### Match(匹配)
 
-Stream提供了多种匹配操作，允许检测指定的Predicate是否匹配整个Stream。所有的匹配操作都是 **最终操作** ，并返回一个 boolean 类型的值。
+Stream提供了多种匹配操作，允许检测指定的Predicate是否匹配整个Stream。所有的匹配操作都是 ==**最终操作**== ，并返回一个 boolean 类型的值。
 
 ```java
         // 测试 Match (匹配)操作
@@ -588,7 +588,7 @@ concat = Stream.of("a", "B", "c", "D", "e", "F").
 
 ## Parallel Streams(并行流)
 
-前面提到过Stream有串行和并行两种，串行Stream上的操作是在一个线程中依次完成，而并行Stream则是在多个线程上同时执行。
+==前面提到过Stream有串行和并行两种，串行Stream上的操作是在一个线程中依次完成，而并行Stream则是在多个线程上同时执行。==
 
 下面的例子展示了是如何通过并行Stream来提升性能：
 
